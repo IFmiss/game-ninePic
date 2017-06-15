@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>九宫格游戏</title>
+	<link rel="shortcut icon" href="http://www.daiwei.org/index/images/logo/favicon.ico">
 	<link rel="stylesheet" href="css/style.css">
 	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0">
 	<link rel="stylesheet" href="http://www.daiwei.org/components/loading/css/loading.css">
@@ -468,76 +469,104 @@
 	}
 
 	function showSignIn(){
-		var str = '';
-		str += '<div class="mask_div_signIn">';
-		str += '<div class="div_signIn">';
-		str += '<p class="div_signIn_title">恭喜您完成游戏</p>';
-		str += '<span class="div_signIn_description">留下您的大名,我们会在第一时间写在排行榜上!!!</span>';
-		str += '<input class="div_signIn_InputName" type="text" maxlength="12">';
-		str += '<div class="btn_group">';
-		str += '<div class="btn_submit">提交</div>';
-		str += '<div class="btn_cancle">取消</div>';
-		str += '</div>';
-		str += '</div>';
-		str += '</div>';
+		// var str = '';
+		// str += '<div class="mask_div_signIn">';
+		// str += '<div class="div_signIn">';
+		// str += '<p class="div_signIn_title">恭喜您完成游戏</p>';
+		// str += '<span class="div_signIn_description">留下您的大名,我们会在第一时间写在排行榜上!!!</span>';
+		// str += '<input class="div_signIn_InputName" type="text" maxlength="12">';
+		// str += '<div class="btn_group">';
+		// str += '<div class="btn_submit">提交</div>';
+		// str += '<div class="btn_cancle">取消</div>';
+		// str += '</div>';
+		// str += '</div>';
+		// str += '</div>';
 		removeLoading('success');
 
-		$('body').append(str);
-		$('.div_signIn_InputName').focus();
+		// $('body').append(str);
+		// $('.div_signIn_InputName').focus();
 
-		// $('body').dialog({
-		// 	width:320,
-		// 	type:'primary',
-		// 	title:'恭喜!',
-		// 	isInput:true,
-		// 	inputPlaceholder:'留下您的大名,我们会在第一时间写在排行榜上!!!'
-		// },function(ret){
-		// 	if(ret === 0){
-				
-		// 	}
+		$('body').dialog({
+			width:280,
+			type:'primary',
+			title:'恭喜!',
+			isInput:true,
+			buttons:['提交'],
+			inputPlaceholder:'留下您的大名!!!'
+		},function(ret){
+			if(ret.index === 0){
+				var inputName = ret.input.value;
+				if(inputName === ''){
+	       			alert('用户名不能为空!');
+	       		}else{
+	       			var data = new Date();
+	       			var userName = inputName;
+	       			var dataTime = data.getFullYear()+'-'+checkTime(data.getMonth()+1)+'-'+checkTime(data.getDate());
+	       			var steps = $('.tops_span').text();
+	       			$.ajax({
+	       				url:"server.php?inAjax=1&do=submitUserInfo",
+	       				data:{'username':userName,'steps':steps,'time':dataTime},
+	       				datatype:'json',
+	       				type:'post',
+	       				success:function(){
+	       					alert('数据提交成功,请在排行榜上查看您的排名!')
+	       				},
+	       				error:function(){
+	       					alert('数据提交失败');
+	       				},
+	       			});
+	       			// $('.mask_div_signIn').remove();
+
+	       			// ************再次初始化******************
+	       			shuffle();  //背景随机  
+	       			$('.time_span').html('00:00');
+	       			tips = 0;
+	       			$('.tops_span').html('0');
+	       		}
+			}
+		});
+
+		// $('.btn_submit').on('click',function(e){
+		// 	event.preventDefault();
+  //      		var inputName = $('.div_signIn_InputName').val();
+  //      		if(inputName === ''){
+  //      			alert('用户名不能为空!');
+  //      		}else{
+  //      			var data = new Date();
+  //      			var userName = inputName;
+  //      			var dataTime = data.getFullYear()+'-'+checkTime(data.getMonth()+1)+'-'+checkTime(data.getDate());
+  //      			var steps = $('.tops_span').text();
+  //      			$.ajax({
+  //      				url:"server.php?inAjax=1&do=submitUserInfo",
+  //      				data:{'username':userName,'steps':steps,'time':dataTime},
+  //      				datatype:'json',
+  //      				type:'post',
+  //      				success:function(){
+  //      					alert('数据提交成功,请在排行榜上查看您的排名!')
+  //      				},
+  //      				error:function(){
+  //      					alert('数据提交失败');
+  //      				},
+  //      			});
+  //      			$('.mask_div_signIn').remove();
+
+  //      			// ************再次初始化******************
+  //      			shuffle();  //背景随机  
+  //      			$('.time_span').html('00:00');
+  //      			tips = 0;
+  //      			$('.tops_span').html('0');
+  //      		}
 		// });
 
-		$('.btn_submit').on('click',function(e){
-			event.preventDefault();
-       		var inputName = $('.div_signIn_InputName').val();
-       		if(inputName === ''){
-       			alert('用户名不能为空!');
-       		}else{
-       			var data = new Date();
-       			var userName = inputName;
-       			var dataTime = data.getFullYear()+'-'+checkTime(data.getMonth()+1)+'-'+checkTime(data.getDate());
-       			var steps = $('.tops_span').text();
-       			$.ajax({
-       				url:"server.php?inAjax=1&do=submitUserInfo",
-       				data:{'username':userName,'steps':steps,'time':dataTime},
-       				datatype:'json',
-       				type:'post',
-       				success:function(){
-       					alert('数据提交成功,请在排行榜上查看您的排名!')
-       				},
-       				error:function(){
-       					alert('数据提交失败');
-       				},
-       			});
-       			$('.mask_div_signIn').remove();
-
-       			// ************再次初始化******************
-       			shuffle();  //背景随机  
-       			$('.time_span').html('00:00');
-       			tips = 0;
-       			$('.tops_span').html('0');
-       		}
-		});
-
-		$('.btn_cancle').on('click',function(e){
-			event.preventDefault();
-       		$('.mask_div_signIn').remove();
-       		// ************再次初始化******************
-   			shuffle();  //背景随机  
-   			$('.time_span').html('00:00');
-   			tips = 0;
-   			$('.tops_span').html('0');
-		});
+		// $('.btn_cancle').on('click',function(e){
+		// 	event.preventDefault();
+  //      		$('.mask_div_signIn').remove();
+  //      		// ************再次初始化******************
+  //  			shuffle();  //背景随机  
+  //  			$('.time_span').html('00:00');
+  //  			tips = 0;
+  //  			$('.tops_span').html('0');
+		// });
 	}
 </script>
 
